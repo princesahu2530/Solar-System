@@ -7,13 +7,15 @@ class SimulationControls {
         this.isPaused = false;
         this.isSoundOn = false;
         this.isDarkMode = true;
-        this.showOrbits = true; // Add this line
+        this.showOrbits = true;
         this.backgroundMusic = null;
         this.hoverSound = null;
+        this.globalSpeedFactor = 1; // Add global speed factor
         
         this.initSounds();
         this.setupEventListeners();
         this.createSpeedControls();
+        this.createGlobalSpeedControl(); // Add this new method call
     }
     
     initSounds() {
@@ -25,8 +27,8 @@ class SimulationControls {
         
         // Initialize hover sound
         this.hoverSound = new Audio();
-        this.hoverSound.src = "assets/sounds/solarBackground.mp3"; // Using same file, but you can use a different sound
-        this.hoverSound.volume = 0.2; // Lower volume for hover sound
+        this.hoverSound.src = "assets/sounds/solarBackground.mp3"; 
+        this.hoverSound.volume = 0.2; 
         
         // Add error handling for audio loading
         this.backgroundMusic.addEventListener('error', (e) => {
@@ -127,13 +129,72 @@ class SimulationControls {
         });
     }
     
+    createGlobalSpeedControl() {
+        // Create container for global speed control
+        const globalSpeedControl = document.createElement('div');
+        globalSpeedControl.id = 'global-speed-control';
+        
+        // Create heading
+        const heading = document.createElement('h4');
+        heading.textContent = 'Global Speed';
+        
+        // Create label
+        const label = document.createElement('label');
+        label.textContent = 'All Planets Speed';
+        label.htmlFor = 'global-speed';
+        
+        // Create slider
+        const slider = document.createElement('input');
+        slider.type = 'range';
+        slider.id = 'global-speed';
+        slider.min = '0';
+        slider.max = '500'; // 5x max speed
+        slider.value = '100'; // Default 1x
+        
+        // Create value display
+        const valueDisplay = document.createElement('div');
+        valueDisplay.className = 'speed-value';
+        valueDisplay.textContent = '1x';
+        
+        // Add event listener to slider
+        slider.addEventListener('input', (e) => {
+            const speedFactor = parseInt(e.target.value) / 100;
+            this.globalSpeedFactor = speedFactor;
+            valueDisplay.textContent = `${speedFactor.toFixed(2)}x`;
+            
+            // Update all planet speeds
+            this.planets.forEach(planet => {
+                planet.userData.speedFactor = speedFactor;
+                
+                // Update individual planet sliders to match global speed
+                const planetIndex = this.planets.indexOf(planet);
+                const planetSlider = document.getElementById(`speed-${planetIndex}`);
+                if (planetSlider) {
+                    planetSlider.value = e.target.value;
+                    const planetValueDisplay = planetSlider.parentNode.querySelector('.speed-value');
+                    if (planetValueDisplay) {
+                        planetValueDisplay.textContent = `${speedFactor.toFixed(2)}x`;
+                    }
+                }
+            });
+        });
+        
+        // Append elements to container
+        globalSpeedControl.appendChild(heading);
+        globalSpeedControl.appendChild(label);
+        globalSpeedControl.appendChild(slider);
+        globalSpeedControl.appendChild(valueDisplay);
+        
+        // Append container to body
+        document.body.appendChild(globalSpeedControl);
+    }
+    
     createSpeedControls() {
         const speedControlsContainer = document.getElementById('speed-controls');
         
         this.planets.forEach((planet, index) => {
             const controlDiv = document.createElement('div');
             controlDiv.className = 'planet-speed-control';
-            
             
             const planetName = document.createElement('h4');
             planetName.textContent = planet.userData.name;
@@ -147,7 +208,7 @@ class SimulationControls {
             slider.type = 'range';
             slider.id = `speed-${index}`;
             slider.min = '0';
-            slider.max = '500'; 
+            slider.max = '500'; // Changed from 500 to match global speed max
             slider.value = '100';
             
             const valueDisplay = document.createElement('div');

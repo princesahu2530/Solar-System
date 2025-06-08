@@ -161,3 +161,49 @@ button:hover {
         grid-template-columns: 1fr;
     }
 }
+
+
+#global-speed-control {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+}
+
+#global-speed-control h4 {
+    color: var(--text-color);
+    margin-bottom: 8px;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+#global-speed-control label {
+    margin-bottom: 5px;
+    color: var(--light-text);
+}
+
+#global-speed-control input[type="range"] {
+    width: 100%;
+    accent-color: var(--slider-color);
+}
+
+#global-speed-control .speed-value {
+    text-align: right;
+    font-size: 0.8em;
+    margin-top: 5px;
+    color: var(--light-text);
+}
+
+@media (max-width: 768px) {
+    #global-speed-control {
+        top: 10px;
+        right: 10px;
+        width: 150px;
+    }
+}
