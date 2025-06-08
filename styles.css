@@ -167,7 +167,7 @@ button:hover {
     position: fixed;
     top: 20px;
     right: 20px;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: var(--secondary-color);
     padding: 15px;
     border-radius: 5px;
     z-index: 3;

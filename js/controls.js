@@ -148,8 +148,8 @@ class SimulationControls {
         slider.type = 'range';
         slider.id = 'global-speed';
         slider.min = '0';
-        slider.max = '500'; // 5x max speed
-        slider.value = '100'; // Default 1x
+        slider.max = '500'; 
+        slider.value = '100'; 
         
         // Create value display
         const valueDisplay = document.createElement('div');
@@ -208,7 +208,7 @@ class SimulationControls {
             slider.type = 'range';
             slider.id = `speed-${index}`;
             slider.min = '0';
-            slider.max = '500'; // Changed from 500 to match global speed max
+            slider.max = '500'; 
             slider.value = '100';
             
             const valueDisplay = document.createElement('div');
