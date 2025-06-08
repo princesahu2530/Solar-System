@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Solar System Simulation</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <div id="controls-panel">
+        <div class="header">
+            <h1>Solar System Simulation</h1>
+            <div class="toggle-container">
+                <button id="theme-toggle">Toggle Dark/Light Mode</button>
+                <button id="pause-button">Pause</button>
+                <button id="sound-toggle">Sound: Off</button>
+            </div>
+        </div>
+        
+        <div class="planet-controls">
+            <h2>Planet Speed Controls</h2>
+            <div id="speed-controls">
+                
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <h3>Planet Information</h3>
+            <div id="planet-info">
+                <p>Hover over a planet to see details</p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="tooltip"></div>
+    
+   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+   
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+    
+
+    <script src="js/planets.js"></script>
+    <script src="js/controls.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
