@@ -19,9 +19,53 @@ class SimulationControls {
     initSounds() {
         // Create audio elements
         this.backgroundMusic = new Audio();
-        this.backgroundMusic.src = "assets/sounds/solarBackground.mp3"; // Placeholder URL
+        this.backgroundMusic.src = "assets/sounds/solarBackground.mp3";
         this.backgroundMusic.loop = true;
         this.backgroundMusic.volume = 0.8;
+        
+        // Initialize hover sound
+        this.hoverSound = new Audio();
+        this.hoverSound.src = "assets/sounds/solarBackground.mp3"; // Using same file, but you can use a different sound
+        this.hoverSound.volume = 0.2; // Lower volume for hover sound
+        
+        // Add error handling for audio loading
+        this.backgroundMusic.addEventListener('error', (e) => {
+            console.error('Error loading background music:', e);
+        });
+        
+        this.hoverSound.addEventListener('error', (e) => {
+            console.error('Error loading hover sound:', e);
+        });
+        
+        // Create audio context for better browser compatibility
+        this.audioContext = null;
+        this.setupAudioContext();
+    }
+
+    setupAudioContext() {
+        // Create audio context only when needed (on first user interaction)
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+            // Add a one-time event listener to the document for user interaction
+            const setupAudio = () => {
+                if (!this.audioContext) {
+                    this.audioContext = new AudioContext();
+                    console.log('Audio context created after user interaction');
+                    
+                    // If sound is already toggled on, try to play it
+                    if (this.isSoundOn) {
+                        this.backgroundMusic.play().catch(e => {
+                            console.warn('Could not play audio after creating context:', e);
+                        });
+                    }
+                }
+            };
+            
+            // Listen for user interactions to initialize audio
+            ['click', 'touchstart', 'keydown'].forEach(event => {
+                document.addEventListener(event, setupAudio, { once: true });
+            });
+        }
     }
     
     setupEventListeners() {
@@ -46,7 +90,16 @@ class SimulationControls {
             soundToggle.textContent = `Sound: ${this.isSoundOn ? 'On' : 'Off'}`;
             
             if (this.isSoundOn) {
-                this.backgroundMusic.play();
+                // Create audio context if it doesn't exist yet
+                if (!this.audioContext && window.AudioContext) {
+                    this.setupAudioContext();
+                }
+                
+                // Play with error handling
+                this.backgroundMusic.play().catch(e => {
+                    console.warn('Could not play background music:', e);
+                    alert('Sound playback failed. This may be due to browser autoplay policies. Try clicking elsewhere on the page first.');
+                });
             } else {
                 this.backgroundMusic.pause();
             }
@@ -130,7 +183,10 @@ class SimulationControls {
         
         if (this.isSoundOn) {
             this.hoverSound.currentTime = 0;
-            this.hoverSound.play();
+            this.hoverSound.play().catch(e => {
+                // Silently handle hover sound errors
+                console.warn('Could not play hover sound:', e);
+            });
         }
     }
     

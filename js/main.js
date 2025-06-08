@@ -63,7 +63,7 @@ function createCelestialBodies() {
     // Create sun
     const sunGeometry = new THREE.SphereGeometry(sunData.radius, 32, 32);
     const sunTexture = new THREE.TextureLoader().load('assets/textures/sun.jpg');
-    const sunMaterial = new THREE.MeshBasicMaterial({ 
+    const sunMaterial = new THREE.MeshStandardMaterial({ 
         map: sunTexture,
         emissive: 0xffff00,
         emissiveIntensity: 0.5
